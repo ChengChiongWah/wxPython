@@ -1,0 +1,37 @@
+#!/usr/bin/env python
+
+import wx
+
+
+class MouseEventFrame(wx.Frame):
+
+    def __init__(self, parent, id):
+        wx.Frame.__init__(self, parent, id, 'Frmae with Button',
+                          size=(300, 100))
+        self.panel = wx.Panel(self)
+        self.button = wx.Button(self.panel, label="Noe Over", pos=(100,15))
+        self.Bind(wx.EVT_BUTTON, self.OnButtonClick,
+                  self.button)    #1绑定按钮事件
+        self.button.Bind(wx.EVT_ENTER_WINDOW,
+                         self.OnEnterWindow)  #2绑定鼠标位于其上事件
+        self.button.Bind(wx.EVT_LEAVE_WINDOW,
+                         self.OnLeaveWindow)  #3绑定鼠标离开事件
+
+    def OnButtonClick(self, event):
+        self.panel.SetBackgroundColour('Green')
+        self.panel.Refresh()
+
+    def OnEnterWindow(self, event):
+        self.button.SetLabel("Over Me!")
+        event.Skip()
+
+    def OnLeaveWindow(self, event):
+        self.button.SetLabel("Not Over")
+        event.Skip()
+
+
+if __name__ == '__main__':
+    app = wx.PySimpleApp()
+    frame = MouseEventFrame(parent=None, id=-1)
+    frame.Show()
+    app.MainLoop()
